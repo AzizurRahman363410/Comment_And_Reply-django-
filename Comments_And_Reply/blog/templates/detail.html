@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-center bg-info text-white py2">details page</h1>
+
+<div class="row">
+    <div class="col-8 offset-2">
+
+        <a href="">
+            <h3>title {{post.title}}</h3>
+        </a>
+        <p>{{post.description}}</p>
+        <hr>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-6 offset-3 ">
+
+            <h3 class="bg-dark text-white"> {{comments.count}}, Comments of {{post.title}}</h3>
+            {% for comment in comments %}
+            <blockquote class="blockquote">
+                <p class="mb-0">{{comment.message}}</p>
+                <footer class="blockquote-footer">Created By {{comment.user.username}}, <cite
+                        title="Source Title">{{user.date_joined|date:"F j, Y"}}</cite>
+                        <button type="button" class="btn btn-outline-dark btn-sm reply-btn" data-toggle="collapse" data-target="#collapseExample{{forloop.counter}}">Reply</button>
+                </footer>
+
+            </blockquote>
+            <hr>
+
+
+            <div class="collapse" id="collapseExample{{forloop.counter}}">
+
+            <div class="ml-4">
+                {% for reply in comment.replies.all %}
+                <blockquote class="blockquote">
+                    <p class="mb-0">{{reply.message}}</p>
+                    <footer class="blockquote-footer">Created By {{reply.user.username}}</footer>
+                </blockquote>
+                {% endfor %}
+            </div>
+
+
+            <div class="row">
+                <div class="col-6 offset-3">
+                    <form action="." method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_id" id="" value="{{comment.id}}">
+                        <div class="form-group">
+                            {{form.message}}
+                            <input type="submit" name="" id="" value="Reply" class="btn btn-success mt-3">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+            {% endfor %}
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-8 offset-2">
+        <form action="." method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{form}}
+                <input type="submit" name="" id="" value="Comment" class="btn btn-success mt-3">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="height: 600px;"></div>
+
+{% endblock content %}
